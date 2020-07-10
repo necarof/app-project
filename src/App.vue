@@ -17,6 +17,9 @@
         <div class="invalid-feedback" v-if="!$v.email.email">
           This field shold be an email
         </div>
+        <div class="invalid-feedback" v-if="!$v.email.uniqEmail">
+          This email is used
+        </div>
       </div>
 
       <div class="form-group">
@@ -67,7 +70,16 @@ export default {
   validations: {
     email: {
       required,
-      email
+      email,
+      uniqEmail: function(newEmail) {
+        if (newEmail === '') return true
+        return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            const value = newEmail !== 'test@email.ru'
+            resolve(value)
+          }, 3000)
+        })
+      }
     },
     password: {
       minLength: minLength(8)
